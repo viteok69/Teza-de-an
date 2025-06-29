@@ -23,7 +23,6 @@ if (!$discussion_id) {
     redirect('discussions.php');
 }
 
-// 1. Preluarea detaliilor discuției
 $discussion = null;
 try {
     $query = "SELECT d.*, u.username FROM discussions d LEFT JOIN users u ON d.user_id = u.id WHERE d.id = :id";
@@ -42,7 +41,6 @@ if (!$discussion) {
     redirect('discussions.php');
 }
 
-// 2. Gestionarea trimiterii comentariilor (dacă este o cerere POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     file_put_contents("debug.txt", print_r($_POST, true));
     echo "<pre>";
@@ -51,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         exit();
     if (!isLoggedIn()) {
         flashMessage('error', 'Trebuie să fii autentificat pentru a comenta.');
-        // Redirecționează către pagina de login, apoi utilizatorul poate fi redirecționat înapoi aici.
         redirect('auth/login.php?redirect=' . urlencode("discussion_detail.php?id=" . $discussion_id)); 
     }
 
@@ -63,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
 
     if (empty($comment_text)) {
         flashMessage('error', 'Mesajul comentariului nu poate fi gol.');
-        // Nu redirecționa, doar afișează eroarea pe aceeași pagină, formularul rămâne completat.
     } else {
         try {
             $insert_query = "INSERT INTO comments (discussion_id, user_id, comment_text) VALUES (:discussion_id, :user_id, :comment_text)";
@@ -74,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
             
             if ($insert_stmt->execute()) {
                 flashMessage('success', 'Comentariul tău a fost adăugat cu succes!');
-                // Redirecționează către propria pagină pentru a goli datele POST și a afișa comentariile actualizate
                 header("Location: discussion_detail.php?id=" . $discussion_id);
                 exit();
             } else {
@@ -87,10 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     }
 }
 
-// 3. Preluarea comentariilor pentru această discuție
 $comments = [];
 try {
-    // Selectăm și numele de utilizator pentru afișare
     $comments_query = "SELECT c.*, u.username FROM comments c LEFT JOIN users u ON c.user_id = u.id WHERE c.discussion_id = :discussion_id ORDER BY c.created_at ASC";
     $comments_stmt = $db->prepare($comments_query);
     $comments_stmt->bindParam(':discussion_id', $discussion_id, PDO::PARAM_INT);
@@ -98,7 +91,6 @@ try {
     $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Error fetching comments: " . $e->getMessage());
-    // Continuăm fără comentarii dacă există o eroare
 }
 
 ?>
@@ -112,7 +104,6 @@ try {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
-        /* Stiluri specifice pentru pagină (opțional) */
         .discussion-content img {
             max-width: 100%;
             height: auto;
@@ -121,7 +112,7 @@ try {
             margin-bottom: 15px;
         }
         .comment-card {
-            border-left: 5px solid var(--primary); /* O linie colorată pentru comentarii */
+            border-left: 5px solid var(--primary); 
         }
     </style>
 </head>
