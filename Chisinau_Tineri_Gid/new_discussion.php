@@ -3,7 +3,6 @@ session_start();
 require_once 'config/database.php';
 require_once 'config/helpers.php';
 
-// Redirecționează dacă utilizatorul nu este autentificat
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
@@ -25,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message_type = 'error';
     } else {
         try {
-            // Inserează noua discuție în baza de date
-            // Asigură-te că ai un tabel 'discussions' în baza de date!
             $query = "INSERT INTO discussions (user_id, title, content, created_at) VALUES (:user_id, :title, :content, NOW())";
             $stmt = $db->prepare($query);
 
@@ -37,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 $message = 'Discuția a fost creată cu succes!';
                 $message_type = 'success';
-                // Redirecționează la pagina de discuții după succes
                 header('Location: discussions.php?status=new_discussion_success');
                 exit;
             } else {
