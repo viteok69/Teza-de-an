@@ -4,17 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'config/config.php';
-require_once 'config/database.php'; // Adaugă această linie pentru a include clasa Database
-require_once 'config/helpers.php';   // Adaugă această linie pentru a include funcțiile helper (ex: isLoggedIn())
+require_once 'config/database.php'; 
+require_once 'config/helpers.php'; 
 
 $database = new Database();
 $db = $database->getConnection();
 
-// Preluăm discuțiile din baza de date
 $discussions = [];
 try {
-    // Asigură-te că tabela 'discussions' și 'users' există și sunt populate cu date.
-    // 'LEFT JOIN users' este folosit pentru a prelua numele de utilizator al autorului discuției.
     $query = "SELECT d.*, u.username FROM discussions d LEFT JOIN users u ON d.user_id = u.id ORDER BY d.created_at DESC";
     $stmt = $db->prepare($query);
     $stmt->execute();
@@ -22,7 +19,6 @@ try {
 } catch (PDOException $e) {
     error_log("Error fetching discussions: " . $e->getMessage());
     flashMessage('error', 'Eroare la încărcarea discuțiilor.');
-    // Poți redirecționa sau afișa o eroare vizibilă utilizatorului aici, dacă este necesar
 }
 
 ?>
@@ -136,8 +132,7 @@ try {
                                     </p>
                                     <p class="card-text">
                                         <?php
-                                            // Afișează doar o parte din conținut
-                                            $short_content = strip_tags($discussion['content']); // Elimină tag-urile HTML dacă există
+                                            $short_content = strip_tags($discussion['content']); 
                                             echo htmlspecialchars(substr($short_content, 0, 200));
                                             if (strlen($short_content) > 200) {
                                                 echo '...';
