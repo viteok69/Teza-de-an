@@ -1,10 +1,10 @@
 <?php
 require_once 'config/config.php';
-require_once 'config/database.php'; // Include fișierul de conectare la baza de date
-require_once 'config/helpers.php'; // Asigură-te că helpers.php este inclus pentru sanitizeInput
+require_once 'config/database.php'; 
+require_once 'config/helpers.php'; 
 
 $database = new Database();
-$db = $database->getConnection(); // Obține conexiunea la baza de date
+$db = $database->getConnection(); 
 
 $success_message = '';
 $error_message = '';
@@ -21,27 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error_message = 'Adresa de email nu este validă.';
     } else {
         try {
-            // Interogarea SQL pentru inserarea datelor
             $query = "INSERT INTO contact_messages (name, email, subject, message) VALUES (:name, :email, :subject, :message)";
             
-            // Pregătește interogarea
             $stmt = $db->prepare($query);
             
-            // Lipește valorile parametrilor
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':subject', $subject);
             $stmt->bindParam(':message', $message);
             
-            // Execută interogarea
             if ($stmt->execute()) {
                 $success_message = 'Mesajul tău a fost trimis cu succes și salvat în baza de date! Îți vom răspunde în curând.';
-                $_POST = []; // Golește formularul după trimitere
+                $_POST = []; 
             } else {
                 $error_message = 'A apărut o eroare la salvarea mesajului. Te rugăm să încerci din nou.';
             }
         } catch (PDOException $e) {
-            // Înregistrează eroarea pentru depanare (nu afișa detaliile erorii direct utilizatorului)
             error_log("Eroare la salvarea mesajului de contact: " . $e->getMessage());
             $error_message = 'A apărut o eroare tehnică la salvarea mesajului. Te rugăm să încerci mai târziu.';
         }
