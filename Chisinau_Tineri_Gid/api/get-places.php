@@ -22,7 +22,6 @@ try {
         $params[':category'] = $category;
     }
     
-    // Get places from database
     $sql = "SELECT p.*, c.name_ro as category_name, c.color as category_color, c.icon as category_icon
             FROM places p 
             LEFT JOIN categories c ON p.category_id = c.id 
@@ -58,7 +57,6 @@ try {
         ];
     }
     
-    // If no places in database, return static data
     if (empty($places)) {
         $places = getStaticPlaces($category);
     }
@@ -80,7 +78,6 @@ try {
 
 function getStaticPlaces($category = 0) {
     $all_places = [
-        // Entertainment places
         [
             'id' => 'static_1',
             'title' => 'Parcul Central "Ștefan cel Mare"',
@@ -191,7 +188,6 @@ function getStaticPlaces($category = 0) {
         ]
     ];
     
-    // Filter by category if specified
     if ($category > 0) {
         return array_filter($all_places, function($place) use ($category) {
             return $place['category_id'] == $category;
