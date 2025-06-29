@@ -6,11 +6,9 @@ require_once 'config/helpers.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// Get search and filter parameters
 $search_query = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
 $category_filter = isset($_GET['category']) ? sanitizeInput($_GET['category']) : '';
 
-// Build query conditions
 $where_conditions = [];
 $params = [];
 
@@ -26,7 +24,6 @@ if (!empty($category_filter)) {
 
 $where_clause = !empty($where_conditions) ? 'WHERE ' . implode(' AND ', $where_conditions) : '';
 
-// Get places
 try {
     $query = "SELECT * FROM places $where_clause ORDER BY category, rating DESC, name";
     $stmt = $db->prepare($query);
@@ -39,13 +36,11 @@ try {
     $places = [];
 }
 
-// Group places by category
 $grouped_places = [];
 foreach ($places as $place) {
     $grouped_places[$place['category']][] = $place;
 }
 
-// Get all categories for filter dropdown
 try {
     $categories_query = "SELECT DISTINCT category FROM places ORDER BY category";
     $categories_stmt = $db->prepare($categories_query);
@@ -56,7 +51,6 @@ try {
     $categories = [];
 }
 
-// Category display names with emojis
 $category_names = [
     'park' => '🌳 Parcuri și Recreere',
     'restaurant' => '🍽️ Restaurante', 
@@ -72,7 +66,6 @@ $category_names = [
     'transport' => '🚌 Transport'
 ];
 
-// Get total count for display
 $total_places = count($places);
 ?>
 
@@ -88,7 +81,6 @@ $total_places = count($places);
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-container">
@@ -122,7 +114,6 @@ $total_places = count($places);
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <h1>Descoperă Chișinăul</h1>
@@ -130,7 +121,6 @@ $total_places = count($places);
         </div>
     </section>
 
-    <!-- Search Section -->
     <div class="container">
         <div class="search-section">
             <form method="GET" class="search-form" id="search-form">
@@ -187,7 +177,6 @@ $total_places = count($places);
         </div>
     </div>
 
-    <!-- Places Content -->
     <main class="container py-8">
         <?php if (empty($places)): ?>
             <div class="no-results">
@@ -302,7 +291,6 @@ $total_places = count($places);
         <?php endif; ?>
     </main>
 
-    <!-- Footer -->
     <footer class="py-12" style="background: var(--gray-900); color: var(--white);">
         <div class="container text-center">
             <div class="mb-6">
