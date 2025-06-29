@@ -1,12 +1,10 @@
--- Create the places database
+
 CREATE DATABASE IF NOT EXISTS places_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE places_db;
 
--- Drop existing tables if they exist
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS users;
 
--- Create users table for admin functionality
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -16,7 +14,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create places table
 CREATE TABLE places (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(200) NOT NULL,
@@ -35,11 +32,9 @@ CREATE TABLE places (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Insert admin user (password: admin123)
 INSERT INTO users (username, email, password, is_admin) VALUES 
 ('admin', 'admin@chisinau-guide.md', '$2y$10$bRmIrzKyQQ4TXieEBqBXoOR7WlhH9csro7Y5ys1p0dhAJRLK1tduO', TRUE);
 
--- Insert real places from Chișinău
 INSERT INTO places (name, category, address, description, image_url, latitude, longitude, added_by_user, phone, website, opening_hours, price_range) VALUES
 
 -- Parks and Recreation
