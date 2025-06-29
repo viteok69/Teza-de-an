@@ -1,4 +1,4 @@
-// Theme Management
+
 function toggleTheme() {
   const html = document.documentElement
   const currentTheme = html.getAttribute("data-theme")
@@ -28,7 +28,7 @@ function initTheme() {
   console.log(`Theme initialized: ${savedTheme}`)
 }
 
-// Mobile Navigation
+
 function toggleMobileMenu() {
   const navbarNav = document.getElementById("navbar-nav")
   const navbarToggle = document.querySelector(".navbar-toggle")
@@ -40,7 +40,7 @@ function toggleMobileMenu() {
   }
 }
 
-// Search Functionality - Database Only
+
 let searchTimeout
 
 function initSearch() {
@@ -49,7 +49,6 @@ function initSearch() {
   const searchForm = document.getElementById("search-form")
 
   if (searchInput) {
-    // Real-time search suggestions from database
     searchInput.addEventListener("input", function () {
       const query = this.value.trim()
 
@@ -64,7 +63,6 @@ function initSearch() {
       }
     })
 
-    // Hide suggestions when clicking outside
     document.addEventListener("click", (e) => {
       if (!searchInput.contains(e.target)) {
         hideLiveSearchResults()
@@ -73,7 +71,6 @@ function initSearch() {
   }
 
   if (categorySelect) {
-    // Auto-submit on category change
     categorySelect.addEventListener("change", () => {
       if (searchForm) {
         searchForm.submit()
@@ -83,7 +80,6 @@ function initSearch() {
 }
 
 function performDatabaseSearch(query) {
-  // Create or get search results container
   let resultsContainer = document.getElementById("live-search-results")
   if (!resultsContainer) {
     resultsContainer = document.createElement("div")
@@ -109,7 +105,6 @@ function performDatabaseSearch(query) {
     searchContainer.appendChild(resultsContainer)
   }
 
-  // Show loading
   resultsContainer.innerHTML = `
         <div class="p-4 text-center">
             <i class="fas fa-spinner fa-spin text-primary"></i>
@@ -118,7 +113,6 @@ function performDatabaseSearch(query) {
     `
   resultsContainer.style.display = "block"
 
-  // Perform database search
   fetch(`api/search.php?q=${encodeURIComponent(query)}&limit=5`)
     .then((response) => response.json())
     .then((data) => {
@@ -223,7 +217,6 @@ function getCategoryName(category) {
   return categoryNames[category] || category
 }
 
-// Form Enhancements
 function initForms() {
   const forms = document.querySelectorAll("form")
 
@@ -235,7 +228,6 @@ function initForms() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Se procesează...'
         submitBtn.disabled = true
 
-        // Re-enable after 10 seconds as fallback
         setTimeout(() => {
           submitBtn.innerHTML = originalText
           submitBtn.disabled = false
@@ -245,7 +237,6 @@ function initForms() {
   })
 }
 
-// Animations
 function initAnimations() {
   const observerOptions = {
     threshold: 0.1,
@@ -261,13 +252,11 @@ function initAnimations() {
     })
   }, observerOptions)
 
-  // Observe elements for animation
   document.querySelectorAll(".card, .category-header, .place-card").forEach((el) => {
     observer.observe(el)
   })
 }
 
-// Notifications
 function showNotification(message, type = "info", duration = 5000) {
   const notification = document.createElement("div")
   notification.className = `alert alert-${type}`
@@ -296,12 +285,10 @@ function showNotification(message, type = "info", duration = 5000) {
 
   document.body.appendChild(notification)
 
-  // Animate in
   setTimeout(() => {
     notification.style.transform = "translateX(0)"
   }, 100)
 
-  // Auto remove
   setTimeout(() => {
     notification.style.transform = "translateX(100%)"
     setTimeout(() => {
@@ -312,17 +299,14 @@ function showNotification(message, type = "info", duration = 5000) {
   }, duration)
 }
 
-// Utility Functions
 function escapeHtml(text) {
   const div = document.createElement("div")
   div.textContent = text
   return div.innerHTML
 }
 
-// Keyboard Shortcuts
 function initKeyboardShortcuts() {
   document.addEventListener("keydown", (e) => {
-    // Ctrl/Cmd + K to focus search
     if ((e.ctrlKey || e.metaKey) && e.key === "k") {
       e.preventDefault()
       const searchInput = document.getElementById("search")
@@ -332,7 +316,6 @@ function initKeyboardShortcuts() {
       }
     }
 
-    // Escape to clear search and hide results
     if (e.key === "Escape") {
       const searchInput = document.getElementById("search")
       if (searchInput && searchInput === document.activeElement) {
@@ -341,7 +324,6 @@ function initKeyboardShortcuts() {
       }
     }
 
-    // Ctrl/Cmd + D to toggle dark mode
     if ((e.ctrlKey || e.metaKey) && e.key === "d") {
       e.preventDefault()
       toggleTheme()
@@ -349,7 +331,6 @@ function initKeyboardShortcuts() {
   })
 }
 
-// Admin Form Validation
 function initAdminValidation() {
   const adminForm = document.getElementById("admin-form")
   if (!adminForm) return
@@ -387,15 +368,12 @@ function validateField(field) {
   let isValid = true
   let errorMessage = ""
 
-  // Required field validation
   if (field.hasAttribute("required") && !value) {
     isValid = false
     errorMessage = "Acest câmp este obligatoriu."
   }
 
-  // URL validation - more flexible
   if ((field.type === "url" || field.name === "website_url" || field.name === "image_url") && value) {
-    // Simple validation - just check if it looks like a URL
     const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
     if (!urlPattern.test(value)) {
       isValid = false
@@ -403,13 +381,11 @@ function validateField(field) {
     }
   }
 
-  // Email validation
   if (field.type === "email" && value && !isValidEmail(value)) {
     isValid = false
     errorMessage = "Te rog să introduci o adresă de email validă."
   }
 
-  // Number validation
   if (field.type === "number" && value) {
     const num = Number.parseFloat(value)
     const min = Number.parseFloat(field.min)
@@ -467,7 +443,6 @@ function isValidEmail(email) {
   return emailRegex.test(email)
 }
 
-// Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   console.log("🚀 Initializing Chișinău Youth Guide...")
 
@@ -480,10 +455,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("✅ Chișinău Youth Guide loaded successfully!")
 
-  // NO WELCOME MESSAGE - REMOVED COMPLETELY
 })
 
-// Global functions for HTML onclick events
 window.toggleTheme = toggleTheme
 window.toggleMobileMenu = toggleMobileMenu
 window.selectSearchResult = selectSearchResult
