@@ -9,11 +9,9 @@ try {
     $limit = isset($_GET['limit']) ? min(50, (int)$_GET['limit']) : 20;
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
     
-    // Get database connection
     $database = new Database();
     $db = $database->getConnection();
     
-    // Build query
     $where_clause = "WHERE p.is_active = 1";
     $params = [];
     
@@ -113,7 +111,6 @@ function getStaticPlaces($category = 0) {
             'category_id' => 1
         ],
         
-        // Education places
         [
             'id' => 'static_3',
             'title' => 'Universitatea de Stat din Moldova',
@@ -149,7 +146,6 @@ function getStaticPlaces($category = 0) {
             'category_id' => 2
         ],
         
-        // Career places
         [
             'id' => 'static_5',
             'title' => 'Agenția Națională pentru Ocuparea Forței de Muncă',
@@ -168,7 +164,6 @@ function getStaticPlaces($category = 0) {
             'category_id' => 3
         ],
         
-        // Public Services
         [
             'id' => 'static_6',
             'title' => 'Spitalul Clinic Republican',
