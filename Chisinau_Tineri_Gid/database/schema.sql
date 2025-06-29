@@ -1,12 +1,10 @@
--- Create the places database
+
 CREATE DATABASE IF NOT EXISTS places_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE places_db;
 
--- Drop existing tables
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS users;
 
--- Create users table
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -16,7 +14,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create places table with URL field
 CREATE TABLE places (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(200) NOT NULL,
@@ -35,21 +32,17 @@ CREATE TABLE places (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
-    -- Add indexes for better search performance
     INDEX idx_name (name),
     INDEX idx_category (category),
     INDEX idx_created_at (created_at),
     FULLTEXT(name, description, address)
 );
 
--- Insert admin user (password: admin123)
 INSERT INTO users (username, email, password, is_admin) VALUES 
 ('admin', 'admin@chisinau-guide.md', '$2y$10$bRmIrzKyQQ4TXieEBqBXoOR7WlhH9csro7Y5ys1p0dhAJRLK1tduO', TRUE);
 
--- Insert comprehensive places data for Chișinău
 INSERT INTO places (name, category, address, description, website_url, latitude, longitude, phone, opening_hours, price_range, rating) VALUES
 
--- PARKS & RECREATION (10 places)
 ('Parcul Valea Morilor', 'park', 'Bulevardul Dacia, Chișinău', 'Cel mai mare parc din Chișinău cu lac artificial, alei pentru plimbări, zone de picnic și activități sportive. Perfect pentru relaxare și sport în aer liber.', NULL, 47.0167, 28.8056, NULL, '24/7', 'free', 4.5),
 
 ('Parcul Central "Ștefan cel Mare"', 'park', 'Bulevardul Ștefan cel Mare și Sfânt, Chișinău', 'Parcul central istoric al capitalei cu monumente, fântâni arteziene și alei umbrite. Locul perfect pentru plimbări în centrul orașului.', NULL, 47.0245, 28.8322, NULL, '24/7', 'free', 4.7),
@@ -60,7 +53,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Parcul Rîșcani', 'park', 'Strada Florilor, Chișinău', 'Parc de cartier cu terenuri de sport, zone de joacă și spații verzi. Locul preferat al tinerilor din sectorul Rîșcani.', NULL, 47.0456, 28.8234, NULL, '24/7', 'free', 4.1),
 
--- RESTAURANTS (15 places)
+    
 ('Andy\'s Pizza', 'restaurant', 'Bulevardul Ștefan cel Mare și Sfânt 3, Chișinău', 'Lanțul local de pizzerii cel mai popular din Moldova. Pizza proaspătă, livrare rapidă și prețuri accesibile pentru tineri.', 'https://andys.md', 47.0245, 28.8267, '+373 22 27-27-27', '10:00-23:00', 'budget', 4.3),
 
 ('Smokehouse BBQ', 'restaurant', 'Strada Armenească 13, Chișinău', 'Restaurant specializat în grătar și BBQ cu atmosferă americană. Porții generoase și prețuri rezonabile.', NULL, 47.0234, 28.8289, '+373 69 123-456', '12:00-23:00', 'moderate', 4.5),
@@ -81,7 +74,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Gastrobar 1900', 'restaurant', 'Strada Kogălniceanu 78, Chișinău', 'Gastrobar modern cu bucătărie fusion și cocktailuri creative. Atmosferă sofisticată pentru tineri profesioniști.', NULL, 47.0223, 28.8312, '+373 69 456-789', '18:00-02:00', 'expensive', 4.6),
 
--- CAFES (10 places)
+    
 ('Tucano Coffee', 'cafe', 'Strada 31 August 1989, 121, Chișinău', 'Cafenea modernă cu atmosferă plăcută, cafea de calitate și deserturi delicioase. Locul perfect pentru întâlniri și studiu.', 'https://tucano.md', 47.0189, 28.8356, '+373 22 123-456', '07:00-22:00', 'moderate', 4.5),
 
 ('Starbucks Moldova', 'cafe', 'Bulevardul Ștefan cel Mare și Sfânt 126, Chișinău', 'Prima cafenea Starbucks din Moldova. Cafea premium, atmosferă internațională și WiFi gratuit.', 'https://starbucks.md', 47.0223, 28.8334, '+373 22 345-678', '07:00-22:00', 'moderate', 4.4),
@@ -102,7 +95,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Morning Glory', 'cafe', 'Strada Mitropolit Varlaam 45, Chișinău', 'Cafenea specializată în mic dejun și brunch. Atmosferă luminoasă și meniu sănătos.', NULL, 47.0267, 28.8234, '+373 69 123-456', '07:00-15:00', 'budget', 4.3),
 
--- SHOPPING (8 places)
+
 ('Mall Dova', 'shopping', 'Strada Arborilor 21, Chișinău', 'Cel mai mare centru comercial din Moldova cu peste 100 de magazine, cinema, food court și zone de divertisment.', 'https://malldova.md', 47.0056, 28.7906, '+373 22 888-555', '10:00-22:00', 'moderate', 4.5),
 
 ('Shopping MallDova', 'shopping', 'Strada Calea Ieșilor 8, Chișinău', 'Centru comercial modern cu magazine de brand, restaurante și cinema. Popular printre tineri pentru shopping și divertisment.', NULL, 47.0445, 28.8678, '+373 22 567-890', '10:00-22:00', 'moderate', 4.3),
@@ -119,7 +112,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Botanica Mall', 'shopping', 'Strada Dacia 47/4, Chișinău', 'Centru comercial din sectorul Botanica cu magazine diverse și food court. Accesibil și convenabil.', NULL, 46.9987, 28.8234, '+373 22 012-345', '10:00-21:00', 'moderate', 4.1),
 
--- EDUCATION (6 places)
+
 ('Universitatea de Stat din Moldova', 'education', 'Strada Alexei Mateevici 60, Chișinău', 'Cea mai prestigioasă universitate din Moldova cu multiple facultăți și programe de studiu. Campus modern cu biblioteci și laboratoare.', 'https://usm.md', 47.0220, 28.8353, '+373 22 577-110', '08:00-18:00', 'free', 4.8),
 
 ('Universitatea Tehnică din Moldova', 'education', 'Bulevardul Ștefan cel Mare și Sfânt 168, Chișinău', 'Universitate tehnică de top cu focus pe inginerie, IT și tehnologii moderne. Laboratoare avansate și programe actuale.', 'https://utm.md', 47.0198, 28.8292, '+373 22 509-958', '08:00-18:00', 'free', 4.7),
@@ -132,7 +125,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('IT Step Academy', 'education', 'Strada Armenească 47, Chișinău', 'Academie IT cu cursuri practice în programare, design și tehnologii moderne. Pregătire pentru cariera în IT.', 'https://itstep.md', 47.0234, 28.8289, '+373 22 123-789', '09:00-21:00', 'expensive', 4.6),
 
--- COWORKING SPACES (5 places)
+
 ('Tekwill', 'coworking', 'Strada Alexei Mateevici 60, Chișinău', 'Cel mai mare hub tehnologic din Moldova cu spații de coworking, evenimente și programe de accelerare pentru startup-uri.', 'https://tekwill.md', 47.0220, 28.8353, '+373 22 123-456', '08:00-20:00', 'moderate', 4.7),
 
 ('ATIC Coworking', 'coworking', 'Strada Columna 111, Chișinău', 'Spațiu modern de coworking cu facilități complete pentru freelanceri și echipe mici. Atmosferă profesională și productivă.', 'https://atic.md', 47.0156, 28.8378, '+373 69 234-567', '08:00-22:00', 'moderate', 4.5),
@@ -143,7 +136,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Creative Space', 'coworking', 'Strada Ismail 76, Chișinău', 'Spațiu de lucru pentru creativi, designeri și artiști. Atmosferă inspirațională și facilități specializate.', NULL, 47.0198, 28.8345, '+373 69 567-890', '09:00-21:00', 'moderate', 4.4),
 
--- MUSEUMS & CULTURE (4 places)
+
 ('Muzeul Național de Istorie', 'museum', 'Strada 31 August 1989, 121A, Chișinău', 'Muzeul principal al țării cu expoziții despre istoria și cultura Moldovei. Colecții arheologice și etnografice valoroase.', 'https://nationalmuseum.md', 47.0189, 28.8356, '+373 22 241-356', '10:00-18:00', 'budget', 4.6),
 
 ('Muzeul Național de Arte', 'museum', 'Strada 31 August 1989, 115, Chișinău', 'Muzeul de artă cu cea mai bogată colecție de pictură și sculptură din Moldova. Expoziții permanente și temporare.', NULL, 47.0178, 28.8367, '+373 22 212-460', '10:00-17:00', 'budget', 4.5),
@@ -152,7 +145,7 @@ INSERT INTO places (name, category, address, description, website_url, latitude,
 
 ('Opera Națională', 'entertainment', 'Bulevardul Ștefan cel Mare și Sfânt 152, Chișinău', 'Opera și balet de nivel internațional cu spectacole de prestigiu. Clădire istorică și acustică perfectă.', 'https://opera.md', 47.0198, 28.8292, '+373 22 227-040', '19:00-22:00', 'expensive', 4.8),
 
--- SPORTS & FITNESS (3 places)
+
 ('Complexul Sportiv Republican', 'sports', 'Strada Tricolorului 1, Chișinău', 'Complex sportiv modern cu săli pentru diverse sporturi, piscină și terenuri exterioare. Acces pentru publicul larg.', NULL, 47.0334, 28.8445, '+373 22 678-901', '06:00-22:00', 'budget', 4.4),
 
 ('Fitness Club "Energia"', 'sports', 'Strada Armenească 67, Chișinău', 'Sală de fitness modernă cu echipamente performante și antrenori calificați. Programe diverse pentru toate nivelurile.', NULL, 47.0234, 28.8289, '+373 69 678-901', '06:00-23:00', 'moderate', 4.3),
