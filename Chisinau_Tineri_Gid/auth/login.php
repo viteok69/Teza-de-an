@@ -2,7 +2,6 @@
 require_once '../config/config.php';
 require_once 'AuthService.php';
 
-// Redirect if already logged in
 if (isLoggedIn()) {
     redirect('../dashboard.php');
 }
@@ -49,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="../index.php" class="navbar-brand">
@@ -69,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Login Form -->
     <section class="py-20">
         <div class="container">
             <div class="flex justify-center">
