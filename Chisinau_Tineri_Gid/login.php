@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message_type = 'error';
     } else {
         try {
-            // Căutăm utilizatorul în baza de date și selectăm și coloana 'is_admin'
             $query = "SELECT id, username, password, is_admin FROM users WHERE username = :username LIMIT 0,1";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':username', $username);
@@ -27,20 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verificăm dacă utilizatorul există ȘI dacă parola corespunde (folosind password_verify)
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
-                $_SESSION['is_admin'] = (bool)$user['is_admin']; // Stochează rolul de administrator în sesiune
+                $_SESSION['is_admin'] = (bool)$user['is_admin']; 
 
-                // Redirecționează în funcție de rolul utilizatorului
                 if ($_SESSION['is_admin']) {
                     header('Location: admin.php');
                 } else {
-                    // Dacă nu este admin, îi redirecționăm pe pagina principală (sau o altă pagină non-admin)
                     header('Location: index.php');
                 }
-                exit; // Oprește executarea scriptului după redirecționare
+                exit;
             } else {
                 $message = 'Username sau parolă incorecte.';
                 $message_type = 'error';
@@ -48,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $message = 'Eroare la conectarea la baza de date: ' . $e->getMessage();
             $message_type = 'error';
-            error_log("Login error: " . $e->getMessage()); // Înregistrează eroarea pentru depanare
+            error_log("Login error: " . $e->getMessage()); 
         }
     }
 }
