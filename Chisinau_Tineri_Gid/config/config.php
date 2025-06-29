@@ -1,11 +1,9 @@
 <?php
 
-// Site configuration
 define('SITE_NAME', 'Ghidul Tinerilor Chișinău');
 define('SITE_URL', 'http://localhost/chisinau-youth-guide');
 define('UPLOAD_PATH', 'uploads/');
 
-// Include database connection
 require_once __DIR__ . '/database.php';
 
 function generateCSRFToken() {
