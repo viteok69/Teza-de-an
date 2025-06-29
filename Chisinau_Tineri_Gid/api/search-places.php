@@ -19,14 +19,11 @@ try {
         exit;
     }
     
-    // Get database connection
     $database = new Database();
     $db = $database->getConnection();
     
-    // Search in local database first
     $local_results = searchLocalPlaces($db, $query, $limit);
     
-    // If we have enough local results, return them
     if (count($local_results) >= 5) {
         echo json_encode([
             'success' => true,
@@ -36,11 +33,9 @@ try {
         exit;
     }
     
-    // Add some static results for common searches
     $static_results = getStaticResults($query);
     $all_results = array_merge($local_results, $static_results);
     
-    // Limit results
     $all_results = array_slice($all_results, 0, $limit);
     
     echo json_encode([
@@ -95,7 +90,6 @@ function searchLocalPlaces($db, $query, $limit) {
 
 function getStaticResults($query) {
     $static_places = [
-        // Entertainment
         [
             'id' => 'static_1',
             'title' => 'Parcul Central "Ștefan cel Mare"',
@@ -127,7 +121,6 @@ function getStaticResults($query) {
             'keywords' => ['teatru', 'theater', 'spectacol', 'cultura', 'eminescu']
         ],
         
-        // Education
         [
             'id' => 'static_4',
             'title' => 'Universitatea de Stat din Moldova',
@@ -149,7 +142,6 @@ function getStaticResults($query) {
             'keywords' => ['universitate', 'tehnica', 'utm', 'inginerie', 'it', 'tehnologie']
         ],
         
-        // Career
         [
             'id' => 'static_6',
             'title' => 'Agenția Națională pentru Ocuparea Forței de Muncă',
@@ -161,7 +153,6 @@ function getStaticResults($query) {
             'keywords' => ['munca', 'job', 'angajare', 'cariera', 'consiliere', 'profesional']
         ],
         
-        // Public Services
         [
             'id' => 'static_7',
             'title' => 'Spitalul Clinic Republican',
@@ -188,7 +179,6 @@ function getStaticResults($query) {
     $query_lower = mb_strtolower($query, 'UTF-8');
     
     foreach ($static_places as $place) {
-        // Check if query matches title, description, or keywords
         $title_match = mb_strpos(mb_strtolower($place['title'], 'UTF-8'), $query_lower) !== false;
         $desc_match = mb_strpos(mb_strtolower($place['description'], 'UTF-8'), $query_lower) !== false;
         $keyword_match = false;
@@ -202,7 +192,7 @@ function getStaticResults($query) {
         }
         
         if ($title_match || $desc_match || $keyword_match) {
-            unset($place['keywords']); // Remove keywords from result
+            unset($place['keywords']); 
             $results[] = $place;
         }
     }
