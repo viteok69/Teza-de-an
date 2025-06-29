@@ -3,9 +3,7 @@ session_start();
 require_once 'config/database.php';
 require_once 'config/helpers.php';
 
-// Verifică dacă utilizatorul este logat ȘI dacă este administrator
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    // Dacă nu este logat sau nu este admin, redirecționează către pagina de login
     header('Location: login.php');
     exit;
 }
@@ -13,13 +11,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['
 $database = new Database();
 $db = $database->getConnection();
 
-// Handle form submission
 $message = '';
 $message_type = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Validate and sanitize input
         $name = sanitizeInput($_POST['name']);
         $category = sanitizeInput($_POST['category']);
         $address = sanitizeInput($_POST['address']);
@@ -33,29 +29,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price_range = sanitizeInput($_POST['price_range']);
         $rating = !empty($_POST['rating']) ? floatval($_POST['rating']) : 0.0;
 
-        // Validate required fields
         if (empty($name) || empty($category) || empty($address) || empty($description)) {
             throw new Exception('Toate câmpurile obligatorii trebuie completate.');
         }
 
-        // Validate category
         $valid_categories = ['park', 'restaurant', 'cafe', 'museum', 'shopping', 'education', 'entertainment', 'sports', 'coworking', 'nightlife', 'health', 'transport'];
         if (!in_array($category, $valid_categories)) {
             throw new Exception('Categoria selectată nu este validă.');
         }
 
-        // Validate price range
         $valid_prices = ['free', 'budget', 'moderate', 'expensive'];
         if (!in_array($price_range, $valid_prices)) {
             throw new Exception('Gama de prețuri selectată nu este validă.');
         }
 
-        // Validate rating
         if ($rating < 0 || $rating > 5) {
             throw new Exception('Rating-ul trebuie să fie între 0 și 5.');
         }
 
-        // Validate URLs if provided
         if ($website_url === false) {
             throw new Exception('URL-ul website-ului nu este valid. Încearcă: example.com sau https://example.com');
         }
@@ -64,8 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('URL-ul imaginii nu este valid. Încearcă: example.com/image.jpg sau https://example.com/image.jpg');
         }
 
-        // Insert into database using prepared statement
-        // Consideră să folosești $_SESSION['user_id'] aici pentru 'added_by_user' dacă vrei să știi cine a adăugat locul
         $query = "INSERT INTO places (name, category, address, description, website_url, image_url, latitude, longitude, phone, opening_hours, price_range, rating, added_by_user, created_at) 
                   VALUES (:name, :category, :address, :description, :website_url, :image_url, :latitude, :longitude, :phone, :opening_hours, :price_range, :rating, :added_by_user, NOW())";
         
@@ -83,14 +72,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':opening_hours' => !empty($opening_hours) ? $opening_hours : null,
             ':price_range' => $price_range,
             ':rating' => $rating,
-            ':added_by_user' => $_SESSION['user_id'] // Folosește ID-ul utilizatorului logat
+            ':added_by_user' => $_SESSION['user_id'] 
         ]);
 
         if ($result) {
             $message = "Locul '{$name}' a fost adăugat cu succes în baza de date și este acum disponibil pentru căutare!";
             $message_type = 'success';
             
-            // Clear form data after successful submission
             $_POST = [];
         } else {
             throw new Exception('Eroare la salvarea în baza de date.');
@@ -103,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get recent places
 try {
     $recent_query = "SELECT * FROM places ORDER BY created_at DESC LIMIT 10";
     $recent_stmt = $db->prepare($recent_query);
@@ -114,7 +101,6 @@ try {
     error_log("Error fetching recent places: " . $e->getMessage());
 }
 
-// Category options
 $categories = [
     'park' => '🌳 Parc',
     'restaurant' => '🍽️ Restaurant',
