@@ -1,24 +1,21 @@
 <?php
-// Database setup script
+
 $host = 'localhost';
 $username = 'root';
 $password = '';
 
 try {
-    // Connect to MySQL server (without specifying database)
+
     $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     echo "<h2>Setting up Chișinău Youth Guide Database...</h2>";
     
-    // Create database
     $pdo->exec("CREATE DATABASE IF NOT EXISTS chisinau_youth_guide CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     echo "<p>✅ Database 'chisinau_youth_guide' created successfully!</p>";
     
-    // Use the database
     $pdo->exec("USE chisinau_youth_guide");
     
-    // Create tables
     $sql = "
     -- Categories table
     CREATE TABLE IF NOT EXISTS categories (
@@ -116,7 +113,6 @@ try {
     $pdo->exec($sql);
     echo "<p>✅ Tables created successfully!</p>";
     
-    // Insert sample categories
     $categories = [
         ['Restaurante & Cafenele', 'Рестораны и кафе', 'Restaurants & Cafes', 'Locuri unde poți mânca și bea', 'fas fa-utensils', '#e74c3c'],
         ['Educație', 'Образование', 'Education', 'Universități, școli, cursuri', 'fas fa-graduation-cap', '#3498db'],
@@ -134,7 +130,6 @@ try {
     }
     echo "<p>✅ Sample categories inserted!</p>";
     
-    // Insert sample places
     $places = [
         ['Tucano Coffee', 'Cafenea modernă în centrul orașului cu atmosferă prietenoasă pentru tineri', 1, 'Str. Ștefan cel Mare 126', 47.0245, 28.8322, '+373 22 123456', 'info@tucanocoffee.md', 'https://tucanocoffee.md', '/assets/images/tucano.jpg', 4.5],
         ['Universitatea Tehnică', 'Universitate tehnică de top din Moldova', 2, 'Bd. Ștefan cel Mare 168', 47.0220, 28.8353, '+373 22 509138', 'info@utm.md', 'https://utm.md', '/assets/images/utm.jpg', 4.2],
