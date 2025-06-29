@@ -16,12 +16,10 @@ class AuthService {
             return ['success' => false, 'errors' => $errors];
         }
         
-        // Check if user already exists
         if ($this->userExists($data['email'], $data['username'])) {
             return ['success' => false, 'errors' => ['Email-ul sau numele de utilizator există deja.']];
         }
         
-        // Hash password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
         
         try {
@@ -63,7 +61,6 @@ class AuthService {
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['full_name'] = $user['first_name'] . ' ' . $user['last_name'];
                     
-                    // Update last login
                     $this->updateLastLogin($user['id']);
                     
                     return ['success' => true, 'user' => $user];
@@ -84,7 +81,6 @@ class AuthService {
     private function validateRegistration($data) {
         $errors = [];
         
-        // Required fields
         if (empty($data['first_name'])) $errors[] = 'Prenumele este obligatoriu.';
         if (empty($data['last_name'])) $errors[] = 'Numele este obligatoriu.';
         if (empty($data['username'])) $errors[] = 'Numele de utilizator este obligatoriu.';
@@ -92,7 +88,6 @@ class AuthService {
         if (empty($data['password'])) $errors[] = 'Parola este obligatorie.';
         if (empty($data['confirm_password'])) $errors[] = 'Confirmarea parolei este obligatorie.';
         
-        // Validation rules
         if (!empty($data['username']) && strlen($data['username']) < 3) {
             $errors[] = 'Numele de utilizator trebuie să aibă cel puțin 3 caractere.';
         }
