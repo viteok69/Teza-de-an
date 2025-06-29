@@ -5,18 +5,15 @@ $success = false;
 $error = '';
 
 try {
-    // Try to connect to MySQL server first
     $pdo = new PDO("mysql:host=localhost", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Read and execute SQL file
+
     $sql = file_get_contents('database/schema.sql');
     
     if ($sql === false) {
         throw new Exception('Nu pot citi fișierul database/schema.sql');
     }
     
-    // Execute SQL
     $pdo->exec($sql);
     $success = true;
     
