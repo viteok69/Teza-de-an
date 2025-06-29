@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($result['success']) {
             $success = $result['message'];
-            // Clear form data
             $_POST = [];
         } else {
             $errors = $result['errors'];
@@ -51,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="../index.php" class="navbar-brand">
@@ -71,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Registration Form -->
     <section class="py-20">
         <div class="container">
             <div class="flex justify-center">
